@@ -32,7 +32,7 @@ def get_ga4_data(start_date, end_date):
      # Fetch the report
     response = client.run_report(request)
 
-    with open('ga4_data.csv', mode='w', newline='') as file:
+    with open(f'hostname_{start_date}_{end_date}.csv', mode='w', newline='') as file:
         writer = csv.writer(file)
         # Write header
         writer.writerow(['yearMonth', 'hostName', 
@@ -41,7 +41,7 @@ def get_ga4_data(start_date, end_date):
         # Write data rows
         for row in response.rows:
             writer.writerow([row.dimension_values[0].value, row.dimension_values[1].value, 
-                             row.metric_values[0].value , row.metric_values[1].value, 
+                             row.metric_values[0].value, row.metric_values[1].value, 
                              row.metric_values[2].value, row.metric_values[3].value,
                              row.metric_values[4].value])
 
@@ -50,5 +50,7 @@ if __name__ == '__main__':
     today = datetime.today().date()
     start_date = today.replace(day=1) if today.day > 4 else (today - timedelta(months=1)).replace(day=1)
     end_date = today - timedelta(days=1) if today.day > 4 else today.replace(day=1) - timedelta(days=1)
-
+    
+    get_ga4_data('2024-03-01', '2024-03-31')
+    get_ga4_data('2024-04-01', '2024-04-30')
     get_ga4_data(start_date=start_date, end_date=end_date)
